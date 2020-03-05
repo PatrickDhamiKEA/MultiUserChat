@@ -8,7 +8,7 @@ import java.io.IOException;
 
 //TODO skal bruges til LIST protocol
 public class UserListPane extends JPanel implements UserStatusListener {
-
+    
 
     private final ChatClient client;
     private JList<String> userListUI;
@@ -40,7 +40,7 @@ public class UserListPane extends JPanel implements UserStatusListener {
         });
     }
 
-    public static void main(String[] args) {
+    public static void run() {
         ChatClient client = new ChatClient("localhost", 8818);
 
         UserListPane userListPane = new UserListPane(client);
@@ -53,7 +53,7 @@ public class UserListPane extends JPanel implements UserStatusListener {
 
         if (client.connect()) {
             try {
-                client.login("guest", "guest");
+                client.login("guest");
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -69,4 +69,5 @@ public class UserListPane extends JPanel implements UserStatusListener {
     public void offline(String login) {
         userListModel.removeElement(login);
     }
+
 }

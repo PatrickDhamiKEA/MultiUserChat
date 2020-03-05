@@ -9,24 +9,23 @@ import java.io.IOException;
 
 public class LoginWindow extends JFrame {
     private final ChatClient client;
-    JTextField loginField = new JTextField();
-    JPasswordField passwordField = new JPasswordField();
-    JButton loginButton = new JButton("Login");
+    JTextField loginField = new JTextField(); //GUI
+    JButton loginButton = new JButton("Login"); //GUI
 
     public LoginWindow() {
+        //JFrames constructor
         super("Login");
 
         this.client = new ChatClient("localhost", 8818);
         client.connect();
 
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //GUI terminator
 
-        JPanel p = new JPanel();
-        p.setLayout(new BoxLayout(p, BoxLayout.Y_AXIS));
-        p.add(loginField);
+        JPanel p = new JPanel(); //GUI
+        p.setLayout(new BoxLayout(p, BoxLayout.Y_AXIS)); //GUI
+        p.add(loginField); //GUI
         //TODO fjernes
-        p.add(passwordField);
-        p.add(loginButton);
+        p.add(loginButton); //GUI
 
         loginButton.addActionListener(new ActionListener() {
             @Override
@@ -35,31 +34,29 @@ public class LoginWindow extends JFrame {
             }
         });
 
-        getContentPane().add(p, BorderLayout.CENTER);
+        getContentPane().add(p, BorderLayout.CENTER); //GUI
 
-        pack();
+        pack(); //GUI
 
-        setVisible(true);
+        setVisible(true); //GUI
     }
 
     private void doLogin() {
-        String login = loginField.getText();
-        //TODO fjernes
-        String password = passwordField.getText();
-
+        String login = loginField.getText(); //GUI
         try {
-            //TODO fjern password
-            if (client.login(login, password)) {
+            if (client.login(login)) {
                 MessagePane messagePane = new MessagePane(client, login);
 
-                JFrame f = new JFrame("Logged in as: " + login);
-                f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                f.setSize(500, 500);
-                f.getContentPane().add(messagePane, BorderLayout.CENTER);
-                f.setVisible(true);
+                JFrame f = new JFrame("Logged in as: " + login);//GUI
+                f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);//GUI
+                f.setSize(500, 500);//GUI
+                f.getContentPane().add(messagePane, BorderLayout.CENTER);//GUI
+                f.setVisible(true);//GUI
+
+
             } else {
                 // show error message
-                JOptionPane.showMessageDialog(this, "Invalid login/password.");
+                JOptionPane.showMessageDialog(this, "Invalid login");//GUI
             }
         } catch (IOException e) {
             e.printStackTrace();

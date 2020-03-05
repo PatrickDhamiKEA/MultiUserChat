@@ -30,9 +30,8 @@ public class ChatClient {
         serverOut.write(cmd.getBytes());
     }
 
-    //TODO skal ændres i forhold til password
-    public boolean login(String login, String password) throws IOException {
-        String cmd = "login " + login + " " + password + "\n";
+    public boolean login(String login) throws IOException {
+        String cmd = "login " + login + "\n";
         serverOut.write(cmd.getBytes());
 
         //TODO laves om til J_OK og J_ER protocol

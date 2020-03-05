@@ -35,6 +35,7 @@ public class ServerWorker extends Thread {
         this.inputStream = clientSocket.getInputStream();
         this.outputStream = clientSocket.getOutputStream();
 
+        // 3 muligheder logpå, logaf eller skriv besked i if/else
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
         String line;
         while ( (line = reader.readLine()) != null) {
@@ -44,7 +45,7 @@ public class ServerWorker extends Thread {
                 //TODO skal laves til QUIT protocol
                 if ("logoff".equals(cmd) || "quit".equalsIgnoreCase(cmd)) {
                     handleLogoff();
-                    break;
+                    break; // clientSocket.close()
                     //TODO skal enten laves til JOIN protocol eller tilføjes JOIN protocol
                     //TODO mangler IP/port
                 } else if ("login".equalsIgnoreCase(cmd)) {
@@ -60,7 +61,7 @@ public class ServerWorker extends Thread {
     }
 
     private void handleMessage(String[] tokens) throws IOException {
-        String body = tokens[1];;
+        String body = tokens[1];
 
         List<ServerWorker> workerList = server.getWorkerList();
         for(ServerWorker worker : workerList) {
@@ -88,13 +89,13 @@ public class ServerWorker extends Thread {
     }
 
     private void handleLogin(OutputStream outputStream, String[] tokens) throws IOException {
-        if (tokens.length == 3) {
+        if (tokens.length == 2) {
             String login = tokens[1];
             //TODO skal fjernes da der ikke skal bruges password
-            String password = tokens[2];
+            //String password = tokens[2];
 
             //TODO mulighed for at lave egne brugere, så det ikke er predefined
-            if ((login.equals("Patrick") && password.equals("Patrick")) || (login.equals("Robin") && password.equals("Robin")) ) {
+
                 String msg = "ok login\n";
                 outputStream.write(msg.getBytes());
                 this.login = login;
@@ -102,6 +103,8 @@ public class ServerWorker extends Thread {
 
                 List<ServerWorker> workerList = server.getWorkerList();
 
+                //itererer igennem workerlist og får logins på alle der er online,
+                // og sender den liste til den der lige er logget på
                 //TODO skal vises som LIST protocol
                 for(ServerWorker worker : workerList) {
                     if (worker.getLogin() != null) {
@@ -112,19 +115,16 @@ public class ServerWorker extends Thread {
                     }
                 }
 
+                //itererer igennem workerlist og sender en besked til alle,
+                //om at der er en ny bruger logget på
                 String onlineMsg = "online " + login + "\n";
                 for(ServerWorker worker : workerList) {
                     if (!login.equals(worker.getLogin())) {
                         worker.send(onlineMsg);
                     }
                 }
-            } else {
-                String msg = "error login\n";
-                outputStream.write(msg.getBytes());
-                System.err.println("Login failed for " + login);
             }
         }
-    }
 
     private void send(String msg) throws IOException {
         if (login != null) {

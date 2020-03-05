@@ -15,6 +15,7 @@ public class MessagePane extends JPanel implements MessageListener {
     private DefaultListModel<String> listModel = new DefaultListModel<>();
     private JList<String> messageList = new JList<>(listModel);
     private JTextField inputField = new JTextField();
+    private JButton button = new JButton();
 
     public MessagePane(ChatClient client, String login) {
         this.client = client;
@@ -25,6 +26,15 @@ public class MessagePane extends JPanel implements MessageListener {
         setLayout(new BorderLayout());
         add(new JScrollPane(messageList), BorderLayout.CENTER);
         add(inputField, BorderLayout.SOUTH);
+        add(button, BorderLayout.EAST);
+
+        button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                UserListPane.run();
+            }
+        });
+
 
         inputField.addActionListener(new ActionListener() {
             @Override
